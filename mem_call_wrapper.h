@@ -63,11 +63,13 @@ inline auto ref(T& t) noexcept
 	return t;
 }
 
+#if 0
 template <typename T>
 inline auto ref(std::reference_wrapper<T> t) noexcept
 	-> std::reference_wrapper<T> {
 	return t.get();
 }
+#endif
 
 template <typename T>
 inline auto cref(T const& t) noexcept
@@ -75,11 +77,13 @@ inline auto cref(T const& t) noexcept
 	return t;
 }
 
+#if 0
 template <typename T>
 inline auto cref(std::reference_wrapper<T> t) noexcept
 	-> std::reference_wrapper<T const> {
 	return t.get();
 }
+#endif
 
 template <typename T> void ref(T const&&) = delete;
 template <typename T> void cref(T const&&) = delete;
