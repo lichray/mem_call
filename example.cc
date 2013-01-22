@@ -15,6 +15,10 @@ struct B : A {
 	}
 };
 
+bool operator==(B const& x, B const& y) {
+	return true;
+}
+
 int main() {
 	B b;
 	auto f = ref(b, &A::f);
@@ -24,4 +28,5 @@ int main() {
 	static_assert(std::is_same<
 	    decltype(f)::second_argument_type,
 	    std::string>::value, "binary_function failed");
+	std::cout << (f == cref(b, &B::f)) << std::endl;
 }

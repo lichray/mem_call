@@ -146,6 +146,45 @@ private:
 	pointer_type	 f_;
 };
 
+template <typename T1, typename Mfp1, typename T2, typename Mfp2>
+inline bool operator==(mem_call_wrapper<T1, Mfp1> const& x,
+    mem_call_wrapper<T2, Mfp2> const& y) {
+	return x.get_object() == y.get_object() and
+		x.get_pointer() == y.get_pointer();
+}
+
+template <typename T1, typename Mfp1, typename T2, typename Mfp2>
+inline bool operator!=(mem_call_wrapper<T1, Mfp1> const& x,
+    mem_call_wrapper<T2, Mfp2> const& y) {
+	return !(x == y);
+}
+
+template <typename T1, typename Mfp1, typename T2, typename Mfp2>
+inline bool operator<(mem_call_wrapper<T1, Mfp1> const& x,
+    mem_call_wrapper<T2, Mfp2> const& y) {
+	return x.get_pointer() < y.get_pointer() ||
+		(!(y.get_object() < x.get_object()) &&
+		 x.get_pointer() < y.get_pointer());
+}
+
+template <typename T1, typename Mfp1, typename T2, typename Mfp2>
+inline bool operator>(mem_call_wrapper<T1, Mfp1> const& x,
+    mem_call_wrapper<T2, Mfp2> const& y) {
+	return y < x;
+}
+
+template <typename T1, typename Mfp1, typename T2, typename Mfp2>
+inline bool operator<=(mem_call_wrapper<T1, Mfp1> const& x,
+    mem_call_wrapper<T2, Mfp2> const& y) {
+	return !(y < x);
+}
+
+template <typename T1, typename Mfp1, typename T2, typename Mfp2>
+inline bool operator>=(mem_call_wrapper<T1, Mfp1> const& x,
+    mem_call_wrapper<T2, Mfp2> const& y) {
+	return !(x < y);
+}
+
 }
 
 #endif
