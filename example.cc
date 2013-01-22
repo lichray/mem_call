@@ -15,15 +15,10 @@ struct B : A {
 	}
 };
 
-template <typename F>
-void call_f(F f) {
-	f(3, "");
-}
-
 int main() {
 	B b;
 	auto f = ref(b, &A::f);
-	call_f(f);
+	f(3, "");
 	//cref(3);
 	//cref(B(), &A::f);
 	static_assert(std::is_same<
