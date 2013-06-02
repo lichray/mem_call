@@ -137,7 +137,7 @@ struct mem_call_wrapper : _mem_call_typedefs<Mfp> {
 
 	template <typename... Args>
 	auto operator()(Args&&... args) const
-       		-> typename std::result_of<Mfp(T, Args...)>::type {
+		-> typename std::result_of<Mfp(T&, Args...)>::type {
 		return (t_->*f_)(std::forward<Args>(args)...);
 	}
 
