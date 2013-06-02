@@ -119,6 +119,22 @@ struct _mem_call_typedefs_impl<R(C::*)(A1, A2, A3...)> {
 	typedef R	result_type;
 };
 
+template <typename T, class C>
+struct _mem_call_typedefs_impl<T C::*> {
+};
+
+template <typename Mfp, typename This, typename ...Args>
+inline auto _mem_invoke(Mfp f, This t, Args&& ...args)
+    -> decltype((t->*f)(std::forward<Args>(args)...)) {
+    return (t->*f)(std::forward<Args>(args)...);
+}
+
+template <typename Mfp, typename This, typename ...Args>
+inline auto _mem_invoke(Mfp f, This t, Args&& ...args)
+    -> decltype(t->*f) {
+    return t->*f;
+}
+
 template <typename T, typename Mfp>
 struct mem_call_wrapper : _mem_call_typedefs<Mfp> {
 	typedef T	object_type;
@@ -138,7 +154,7 @@ struct mem_call_wrapper : _mem_call_typedefs<Mfp> {
 	template <typename... Args>
 	auto operator()(Args&&... args) const
 		-> typename std::result_of<Mfp(T&, Args...)>::type {
-		return (t_->*f_)(std::forward<Args>(args)...);
+		return _mem_invoke(f_, t_, std::forward<Args>(args)...);
 	}
 
 private:
