@@ -12,4 +12,4 @@ tags : *.h example.cc
 
 example : example.o
 	${CXX} ${LDFLAGS} -o example example.o
-example.o: example.cc mem_call_wrapper.h
+example.o: example.cc member_wrapper.h

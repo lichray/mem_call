@@ -23,37 +23,37 @@
  * SUCH DAMAGE.
  */
 
-#ifndef _MEM_CALL_WRAPPER_H
-#define _MEM_CALL_WRAPPER_H 1
+#ifndef _MEMBER_WRAPPER_H
+#define _MEMBER_WRAPPER_H 1
 
 #include <functional>
 
 namespace stdex {
 
 template <typename T, typename Mfp>
-struct mem_call_wrapper;
+struct member_wrapper;
 
 template <typename T, typename Mfp>
 inline auto ref(T& t, Mfp f) noexcept
-	-> mem_call_wrapper<T, Mfp> {
+	-> member_wrapper<T, Mfp> {
 	return { t, f };
 }
 
 template <typename T, typename Mfp>
-inline auto ref(mem_call_wrapper<T, Mfp> t) noexcept
-	-> mem_call_wrapper<T, Mfp> {
+inline auto ref(member_wrapper<T, Mfp> t) noexcept
+	-> member_wrapper<T, Mfp> {
 	return { t.get_object(), t.get_pointer() };
 }
 
 template <typename T, typename Mfp>
 inline auto cref(T const& t, Mfp f) noexcept
-	-> mem_call_wrapper<T const, Mfp> {
+	-> member_wrapper<T const, Mfp> {
 	return { t, f };
 }
 
 template <typename T, typename Mfp>
-inline auto cref(mem_call_wrapper<T, Mfp> t) noexcept
-	-> mem_call_wrapper<T const, Mfp> {
+inline auto cref(member_wrapper<T, Mfp> t) noexcept
+	-> member_wrapper<T const, Mfp> {
 	return { t.get_object(), t.get_pointer() };
 }
 
@@ -92,7 +92,7 @@ template <typename T, typename Mfp> void ref(T const&&, Mfp) = delete;
 template <typename T, typename Mfp> void cref(T const&&, Mfp) = delete;
 
 template <typename>
-struct _mem_call_typedefs_impl;	// invalidate other mem_call_wrapper
+struct _mem_call_typedefs_impl;	// invalidate other member_wrapper
 
 template <typename T>
 struct _mem_call_typedefs
@@ -136,12 +136,12 @@ inline auto _mem_invoke(Mfp f, This t, Args&& ...args)
 }
 
 template <typename T, typename Mfp>
-struct mem_call_wrapper : _mem_call_typedefs<Mfp> {
+struct member_wrapper : _mem_call_typedefs<Mfp> {
 	typedef T	object_type;
 	typedef Mfp	pointer_type;
 
-	mem_call_wrapper(object_type& t, pointer_type f) : t_(&t), f_(f) {}
-	mem_call_wrapper(object_type&& t, pointer_type f) = delete;
+	member_wrapper(object_type& t, pointer_type f) : t_(&t), f_(f) {}
+	member_wrapper(object_type&& t, pointer_type f) = delete;
 
 	object_type& get_object() const noexcept {
 		return *t_;
@@ -163,41 +163,41 @@ private:
 };
 
 template <typename T1, typename Mfp1, typename T2, typename Mfp2>
-inline bool operator==(mem_call_wrapper<T1, Mfp1> const& x,
-    mem_call_wrapper<T2, Mfp2> const& y) {
+inline bool operator==(member_wrapper<T1, Mfp1> const& x,
+    member_wrapper<T2, Mfp2> const& y) {
 	return x.get_pointer() == y.get_pointer() and
 		x.get_object() == y.get_object();
 }
 
 template <typename T1, typename Mfp1, typename T2, typename Mfp2>
-inline bool operator!=(mem_call_wrapper<T1, Mfp1> const& x,
-    mem_call_wrapper<T2, Mfp2> const& y) {
+inline bool operator!=(member_wrapper<T1, Mfp1> const& x,
+    member_wrapper<T2, Mfp2> const& y) {
 	return !(x == y);
 }
 
 template <typename T1, typename Mfp1, typename T2, typename Mfp2>
-inline bool operator<(mem_call_wrapper<T1, Mfp1> const& x,
-    mem_call_wrapper<T2, Mfp2> const& y) {
+inline bool operator<(member_wrapper<T1, Mfp1> const& x,
+    member_wrapper<T2, Mfp2> const& y) {
 	return x.get_pointer() < y.get_pointer() ||
 		(!(y.get_object() < x.get_object()) &&
 		 x.get_pointer() < y.get_pointer());
 }
 
 template <typename T1, typename Mfp1, typename T2, typename Mfp2>
-inline bool operator>(mem_call_wrapper<T1, Mfp1> const& x,
-    mem_call_wrapper<T2, Mfp2> const& y) {
+inline bool operator>(member_wrapper<T1, Mfp1> const& x,
+    member_wrapper<T2, Mfp2> const& y) {
 	return y < x;
 }
 
 template <typename T1, typename Mfp1, typename T2, typename Mfp2>
-inline bool operator<=(mem_call_wrapper<T1, Mfp1> const& x,
-    mem_call_wrapper<T2, Mfp2> const& y) {
+inline bool operator<=(member_wrapper<T1, Mfp1> const& x,
+    member_wrapper<T2, Mfp2> const& y) {
 	return !(y < x);
 }
 
 template <typename T1, typename Mfp1, typename T2, typename Mfp2>
-inline bool operator>=(mem_call_wrapper<T1, Mfp1> const& x,
-    mem_call_wrapper<T2, Mfp2> const& y) {
+inline bool operator>=(member_wrapper<T1, Mfp1> const& x,
+    member_wrapper<T2, Mfp2> const& y) {
 	return !(x < y);
 }
 
