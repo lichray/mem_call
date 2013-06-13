@@ -27,6 +27,7 @@
 #define _MEMBER_WRAPPER_H 1
 
 #include <functional>
+#include <memory>
 
 namespace stdex {
 
@@ -140,7 +141,8 @@ struct member_wrapper : _mem_call_typedefs<Mfp> {
 	typedef T	object_type;
 	typedef Mfp	pointer_type;
 
-	member_wrapper(object_type& t, pointer_type f) : t_(&t), f_(f) {}
+	member_wrapper(object_type& t, pointer_type f) :
+		t_(std::addressof(t)), f_(f) {}
 	member_wrapper(object_type&& t, pointer_type f) = delete;
 
 	object_type& get_object() const noexcept {
